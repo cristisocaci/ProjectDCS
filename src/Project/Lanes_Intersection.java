@@ -9,6 +9,8 @@ import Components.PetriTransition;
 import DataObjects.DataCar;
 import DataObjects.DataCarQueue;
 import DataObjects.DataString;
+import DataObjects.DataTransfer;
+import DataOnly.TransferOperation;
 import Enumerations.LogicConnector;
 import Enumerations.TransitionCondition;
 import Enumerations.TransitionOperation;
@@ -26,6 +28,11 @@ public class Lanes_Intersection {
 		green.SetName("green");
 		green.SetValue("green");
 		pn.ConstantPlaceList.add(green);
+
+		DataString full = new DataString();
+		full.SetName("full");
+		full.SetValue("full");
+		pn.ConstantPlaceList.add(full);
 
 		// -------------------------------------------------------------------------------------------
 		// --------------------------------Intersection1----------------------------------------------
@@ -57,6 +64,11 @@ public class Lanes_Intersection {
 		si2.SetName("si2");
 		pn.PlaceList.add(si2);
 
+		DataTransfer OP11 = new DataTransfer();
+		OP11.SetName("OP11");
+		OP11.Value = new TransferOperation("localhost", "1081" , "in1");
+		pn.PlaceList.add(OP11);
+
 		// --------------------------------------------------------------------
 		// -----------------Lane2 - Giuseppe Garibaldi---------------------
 		// --------------------------------------------------------------------
@@ -77,6 +89,11 @@ public class Lanes_Intersection {
 		DataCar gg2 = new DataCar();
 		gg2.SetName("gg2");
 		pn.PlaceList.add(gg2);
+
+		DataTransfer OP12 = new DataTransfer();
+		OP12.SetName("OP12");
+		OP12.Value = new TransferOperation("localhost", "1081" , "in2");
+		pn.PlaceList.add(OP12);
 
 		// --------------------------------------------------------------------
 		// -----------------Lane3 - From Horia Demian--------------------------
@@ -99,6 +116,11 @@ public class Lanes_Intersection {
 		hd2.SetName("hd2");
 		pn.PlaceList.add(hd2);
 
+		DataTransfer OP13 = new DataTransfer();
+		OP13.SetName("OP13");
+		OP13.Value = new TransferOperation("localhost", "1081" , "in3");
+		pn.PlaceList.add(OP13);
+
 		// --------------------------------------------------------------------
 		// -----------------Lane4 - BT arena A-----------------------------------
 		// --------------------------------------------------------------------
@@ -115,6 +137,11 @@ public class Lanes_Intersection {
 		DataCar bta2 = new DataCar();
 		bta2.SetName("bta2");
 		pn.PlaceList.add(bta2);
+
+		DataTransfer OP14 = new DataTransfer();
+		OP14.SetName("OP14");
+		OP14.Value = new TransferOperation("localhost", "1081" , "in4");
+		pn.PlaceList.add(OP14);
 
 		// ----------------------------------------------------------------------------
 		// --------------------Exit lane1 - Splaiul Independentei----------------------
@@ -186,6 +213,11 @@ public class Lanes_Intersection {
 		as2.SetName("as2");
 		pn.PlaceList.add(as2);
 
+		DataTransfer OP21 = new DataTransfer();
+		OP21.SetName("OP21");
+		OP21.Value = new TransferOperation("localhost", "1082" , "in1");
+		pn.PlaceList.add(OP21);
+
 		// --------------------------------------------------------------------
 		// -----------------Lane2 - Uzinei Electrice--------------------------
 		// --------------------------------------------------------------------
@@ -207,6 +239,11 @@ public class Lanes_Intersection {
 		ue2.SetName("ue2");
 		pn.PlaceList.add(ue2);
 
+		DataTransfer OP22 = new DataTransfer();
+		OP22.SetName("OP22");
+		OP22.Value = new TransferOperation("localhost", "1082" , "in2");
+		pn.PlaceList.add(OP22);
+
 		// --------------------------------------------------------------------
 		// -----------------Lane3 - BT arena B-----------------------------------
 		// --------------------------------------------------------------------
@@ -223,6 +260,11 @@ public class Lanes_Intersection {
 		DataCar btb2 = new DataCar();
 		btb2.SetName("btb2");
 		pn.PlaceList.add(btb2);
+
+		DataTransfer OP23 = new DataTransfer();
+		OP23.SetName("OP23");
+		OP23.Value = new TransferOperation("localhost", "1082" , "in3");
+		pn.PlaceList.add(OP23);
 
 		// ----------------------------------------------------------------------------
 		// --------------------Exit lane1 - Aleea Stadionului--------------------------
@@ -275,6 +317,16 @@ public class Lanes_Intersection {
 		GuardMapping grdt_si1 = new GuardMapping();
 		grdt_si1.condition = t_si1Ct1;
 		grdt_si1.Activations.add(new Activation(t_si1, "si1", TransitionOperation.AddElement, "si_in"));
+		t_si1.GuardMappingList.add(grdt_si1);
+
+		Condition t_si1Ct3 = new Condition(t_si1, "si1", TransitionCondition.NotNull);
+		Condition t_si1Ct4 = new Condition(t_si1, "si_in", TransitionCondition.CanNotAddCars);
+		t_si1Ct3.SetNextCondition(LogicConnector.AND, t_si1Ct4);
+
+		GuardMapping grdt_si_op = new GuardMapping();
+		grdt_si_op.condition = t_si1Ct3;
+		grdt_si_op.Activations.add(new Activation(t_si1, "full", TransitionOperation.SendOverNetwork, "OP11"));
+		grdt_si_op.Activations.add(new Activation(t_si1, "si1", TransitionOperation.Copy, "si1"));
 		t_si1.GuardMappingList.add(grdt_si1);
 
 		t_si1.Delay = 0;
@@ -370,6 +422,16 @@ public class Lanes_Intersection {
 		GuardMapping grdt_gg1 = new GuardMapping();
 		grdt_gg1.condition = t_gg1Ct1;
 		grdt_gg1.Activations.add(new Activation(t_gg1, "gg1", TransitionOperation.AddElement, "gg_in"));
+		t_gg1.GuardMappingList.add(grdt_gg1);
+
+		Condition t_gg1Ct3 = new Condition(t_gg1, "gg1", TransitionCondition.NotNull);
+		Condition t_gg1Ct4 = new Condition(t_gg1, "gg_in", TransitionCondition.CanNotAddCars);
+		t_gg1Ct3.SetNextCondition(LogicConnector.AND, t_gg1Ct4);
+
+		GuardMapping grdt_gg_op = new GuardMapping();
+		grdt_gg_op.condition = t_gg1Ct3;
+		grdt_gg_op.Activations.add(new Activation(t_gg1, "full", TransitionOperation.SendOverNetwork, "OP12"));
+		grdt_gg_op.Activations.add(new Activation(t_gg1, "gg1", TransitionOperation.Copy, "gg1"));
 		t_gg1.GuardMappingList.add(grdt_gg1);
 
 		t_gg1.Delay = 0;
@@ -468,6 +530,16 @@ public class Lanes_Intersection {
 		grdt_hd1.Activations.add(new Activation(t_hd1, "hd1", TransitionOperation.AddElement, "hd_in"));
 		t_hd1.GuardMappingList.add(grdt_hd1);
 
+		Condition t_hd1Ct3 = new Condition(t_hd1, "hd1", TransitionCondition.NotNull);
+		Condition t_hd1Ct4 = new Condition(t_hd1, "hd_in", TransitionCondition.CanNotAddCars);
+		t_hd1Ct3.SetNextCondition(LogicConnector.AND, t_hd1Ct4);
+
+		GuardMapping grdt_hd_op = new GuardMapping();
+		grdt_hd_op.condition = t_hd1Ct3;
+		grdt_hd_op.Activations.add(new Activation(t_hd1, "full", TransitionOperation.SendOverNetwork, "OP13"));
+		grdt_hd_op.Activations.add(new Activation(t_hd1, "hd1", TransitionOperation.Copy, "hd1"));
+		t_hd1.GuardMappingList.add(grdt_hd1);
+
 		t_hd1.Delay = 0;
 		pn.Transitions.add(t_hd1);
 
@@ -564,6 +636,16 @@ public class Lanes_Intersection {
 		grdt_bta1.Activations.add(new Activation(t_bta1, "i2", TransitionOperation.PopElementWithTargetToQueue, "bta_in"));
 		t_bta1.GuardMappingList.add(grdt_bta1);
 
+		Condition t_bta1Ct3 = new Condition(t_bta1, "i2", TransitionCondition.NotNull);
+		Condition t_bta1Ct4 = new Condition(t_bta1, "bta_in", TransitionCondition.CanNotAddCars);
+		t_bta1Ct3.SetNextCondition(LogicConnector.AND, t_bta1Ct4);
+
+		GuardMapping grdt_bta_op = new GuardMapping();
+		grdt_bta_op.condition = t_bta1Ct3;
+		grdt_bta_op.Activations.add(new Activation(t_bta1, "full", TransitionOperation.SendOverNetwork, "OP14"));
+		grdt_bta_op.Activations.add(new Activation(t_bta1, "i2", TransitionOperation.Copy, "i2"));
+		t_bta1.GuardMappingList.add(grdt_bta1);
+
 		t_bta1.Delay = 0;
 		pn.Transitions.add(t_bta1);
 
@@ -625,6 +707,16 @@ public class Lanes_Intersection {
 		GuardMapping grdt_as1 = new GuardMapping();
 		grdt_as1.condition = t_as1Ct1;
 		grdt_as1.Activations.add(new Activation(t_as1, "as1", TransitionOperation.AddElement, "as_in"));
+		t_as1.GuardMappingList.add(grdt_as1);
+
+		Condition t_as1Ct3 = new Condition(t_as1, "as1", TransitionCondition.NotNull);
+		Condition t_as1Ct4 = new Condition(t_as1, "as_in", TransitionCondition.CanNotAddCars);
+		t_as1Ct3.SetNextCondition(LogicConnector.AND, t_as1Ct4);
+
+		GuardMapping grdt_as_op = new GuardMapping();
+		grdt_as_op.condition = t_as1Ct3;
+		grdt_as_op.Activations.add(new Activation(t_as1, "full", TransitionOperation.SendOverNetwork, "OP21"));
+		grdt_as_op.Activations.add(new Activation(t_as1, "as1", TransitionOperation.Copy, "as1"));
 		t_as1.GuardMappingList.add(grdt_as1);
 
 		t_as1.Delay = 0;
@@ -722,6 +814,16 @@ public class Lanes_Intersection {
 		grdt_ue1.Activations.add(new Activation(t_ue1, "ue1", TransitionOperation.AddElement, "ue_in"));
 		t_ue1.GuardMappingList.add(grdt_ue1);
 
+		Condition t_ue1Ct3 = new Condition(t_ue1, "ue1", TransitionCondition.NotNull);
+		Condition t_ue1Ct4 = new Condition(t_ue1, "ue_in", TransitionCondition.CanNotAddCars);
+		t_ue1Ct3.SetNextCondition(LogicConnector.AND, t_ue1Ct4);
+
+		GuardMapping grdt_ue_op = new GuardMapping();
+		grdt_ue_op.condition = t_ue1Ct3;
+		grdt_ue_op.Activations.add(new Activation(t_ue1, "full", TransitionOperation.SendOverNetwork, "OP22"));
+		grdt_ue_op.Activations.add(new Activation(t_ue1, "ue1", TransitionOperation.Copy, "ue1"));
+		t_ue1.GuardMappingList.add(grdt_ue1);
+
 		t_ue1.Delay = 0;
 		pn.Transitions.add(t_ue1);
 
@@ -815,6 +917,16 @@ public class Lanes_Intersection {
 		GuardMapping grdt_btb1 = new GuardMapping();
 		grdt_btb1.condition = t_btb1Ct1;
 		grdt_btb1.Activations.add(new Activation(t_btb1, "i1", TransitionOperation.PopElementWithTargetToQueue, "btb_in"));
+		t_btb1.GuardMappingList.add(grdt_btb1);
+
+		Condition t_btb1Ct3 = new Condition(t_btb1, "i1", TransitionCondition.NotNull);
+		Condition t_btb1Ct4 = new Condition(t_btb1, "btb_in", TransitionCondition.CanNotAddCars);
+		t_btb1Ct3.SetNextCondition(LogicConnector.AND, t_btb1Ct4);
+
+		GuardMapping grdt_btb_op = new GuardMapping();
+		grdt_btb_op.condition = t_btb1Ct3;
+		grdt_btb_op.Activations.add(new Activation(t_btb1, "full", TransitionOperation.SendOverNetwork, "OP23"));
+		grdt_btb_op.Activations.add(new Activation(t_btb1, "i1", TransitionOperation.Copy, "i1"));
 		t_btb1.GuardMappingList.add(grdt_btb1);
 
 		t_btb1.Delay = 0;
